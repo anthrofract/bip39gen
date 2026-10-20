@@ -145,7 +145,6 @@ impl crate::cli::WordCount {
 mod tests {
     use std::{
         fs,
-        os::unix::fs::PermissionsExt as _,
         time::{SystemTime, UNIX_EPOCH},
     };
 
