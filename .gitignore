@@ -7,5 +7,7 @@
 !Justfile
 !LICENSE
 !README.md
+!flake.lock
+!flake.nix
 !src/
 !src/**
