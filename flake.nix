@@ -1,20 +1,10 @@
 {
   description = "bip39gen: Generate a BIP-39 mnemonic from multiple entropy sources";
 
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    fenix = {
-      url = "github:nix-community/fenix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-  };
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
 
   outputs =
-    {
-      self,
-      nixpkgs,
-      fenix,
-    }:
+    { self, nixpkgs }:
     let
       systems = [
         "aarch64-darwin"
@@ -25,23 +15,9 @@
 
       forAllSystems = nixpkgs.lib.genAttrs systems;
 
-      rustToolchain =
-        system:
-        fenix.packages.${system}.toolchainOf {
-          channel = "1.96.0";
-          sha256 = "sha256-mvUGEOHYJpn3ikC5hckneuGixaC+yGrkMM/liDIDgoU=";
-        };
-
       mkBip39gen =
         pkgs:
-        let
-          toolchain = rustToolchain pkgs.stdenv.hostPlatform.system;
-          rustPlatform = pkgs.makeRustPlatform {
-            cargo = toolchain.cargo;
-            rustc = toolchain.rustc;
-          };
-        in
-        rustPlatform.buildRustPackage {
+        pkgs.rustPlatform.buildRustPackage {
           pname = "bip39gen";
           version = "0.1.0";
           src = self;
